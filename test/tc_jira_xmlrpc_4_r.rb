@@ -1,4 +1,7 @@
+require 'rubygems'
+gem 'test-unit'
 require 'test/unit'
+
 require 'jira_xmlrpc_4_r.rb'
 
 class TC_JiraXMLRPC4R < Test::Unit::TestCase
@@ -29,6 +32,12 @@ class TC_JiraXMLRPC4R < Test::Unit::TestCase
   
   def test_add_comment
     assert(@jira.add_comment("SP-4", "#{Time.now}"))
+  end
+  
+  def test_get_statuses
+    result = @jira.get_statuses
+    result.collect!{|status| status['name']}
+    assert(result.member? "Closed")
   end
   
   def teardown
