@@ -3,6 +3,4 @@ Gem::Specification.new do |s|
   s.email = ["Justin@emergeintereactive.com"]
   s.description = %q{A wrapper around the xml-rpc methods of Atlassian Jira}
   s.name = %{jiraxmlrpc4r}
-  s.require_path = '.'
-  
 end
