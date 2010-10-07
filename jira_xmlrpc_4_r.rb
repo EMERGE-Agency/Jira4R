@@ -8,7 +8,7 @@ module JiraXMLRPC4R
 	  end
     
     def self.camelized_caller_method(depth=1)
-		  self.camelize(parse_caller(caller(depth+1).first).last)
+		  camelize(parse_caller(caller(depth+1).first).last)
     end
     
     #From http://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/methods.rb
@@ -23,12 +23,12 @@ module JiraXMLRPC4R
 	  private
 	  #Stolen from ActionMailer, where this was used but was not made reusable
 	  def self.parse_caller(at)
-		if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
-		  file   = Regexp.last_match[1]
-		  line   = Regexp.last_match[2].to_i
-		  method = Regexp.last_match[3]
-		  [file, line, method]
-		end
+  		if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
+  		  file   = Regexp.last_match[1]
+  		  line   = Regexp.last_match[2].to_i
+  		  method = Regexp.last_match[3]
+  		  [file, line, method]
+  		end
 	  end
 	end
 
