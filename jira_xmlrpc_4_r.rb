@@ -47,64 +47,6 @@ module JiraXMLRPC4R
     %w[get_favourite_filters get_issue_types get_priorities get_projects_no_schemes get_resolutions get_server_info get_statuses get_subtask_issue_types logout].each do |method|
       self.class_eval %{def #{method}; call_remote_method; end}
     end
-
-
-    
-    
-    #These are method signatures to use in any future documentation
-      #array	getComments(string token, string issueKey) 
-      #Returns all comments associated with the issue
-  
-      #array	getComponents(string token, string projectKey) 
-      #Returns all components available in the specified project
-  
-      #array	getIssuesFromFilter(string token, string filterId) 
-      #Executes a saved filter
-    
-      #hash	getUser(string token, string username) 
-      #Returns a user's information given a username
-
-      #array	getIssueTypesForProject(string token, string projectId) 
-      #Returns all visible (non-sub task) issue types for the specified project id
-
-      #array	getSubTaskIssueTypesForProject(string token, string projectId) 
-      #Returns all visible sub task issue types for the specified project id.
-
-      #array	getIssuesFromTextSearch(string token, string searchTerms) 
-      #Find issues using a free text search
-
-      #array	getVersions(string token, string projectKey) 
-      #Returns all versions available in the specified project
-    
-      #hash	getIssue(string token, string issueKey) 
-      #Gets an issue from a given issue key.
-
-      #array	getFavouriteFilters(string token) 
-      #Gets all favourite filters available for the currently logged in user
-  
-      #array	getIssueTypes(string token) 
-      #Returns all visible issue types in the system
-  
-      #array	getPriorities(string token) 
-      #Returns all priorities in the system
-  
-      #array	getProjectsNoSchemes(string token) 
-      #Returns a list of projects available to the user
-  
-      #array	getResolutions(string token) 
-      #Returns all resolutions in the system
-  
-      #hash	getServerInfo(string token) 
-      #Returns the Server information such as baseUrl, version, edition, buildDate, buildNumber.
-  
-      #array	getStatuses(string token) 
-      #Returns all statuses in the system
-  
-      #array	getSubTaskIssueTypes(string token) 
-      #Returns all visible subtask issue types in the system
-    
-      #boolean	logout(string token) 
-      #Logs the user out of JIRA
     
     private
       def call_remote_method(*args)
@@ -113,3 +55,58 @@ module JiraXMLRPC4R
       end
   end
 end
+
+#These are method signatures to use in any future documentation
+  #array	getComments(string token, string issueKey) 
+  #Returns all comments associated with the issue
+
+  #array	getComponents(string token, string projectKey) 
+  #Returns all components available in the specified project
+
+  #array	getIssuesFromFilter(string token, string filterId) 
+  #Executes a saved filter
+
+  #hash	getUser(string token, string username) 
+  #Returns a user's information given a username
+
+  #array	getIssueTypesForProject(string token, string projectId) 
+  #Returns all visible (non-sub task) issue types for the specified project id
+
+  #array	getSubTaskIssueTypesForProject(string token, string projectId) 
+  #Returns all visible sub task issue types for the specified project id.
+
+  #array	getIssuesFromTextSearch(string token, string searchTerms) 
+  #Find issues using a free text search
+
+  #array	getVersions(string token, string projectKey) 
+  #Returns all versions available in the specified project
+
+  #hash	getIssue(string token, string issueKey) 
+  #Gets an issue from a given issue key.
+
+  #array	getFavouriteFilters(string token) 
+  #Gets all favourite filters available for the currently logged in user
+
+  #array	getIssueTypes(string token) 
+  #Returns all visible issue types in the system
+
+  #array	getPriorities(string token) 
+  #Returns all priorities in the system
+
+  #array	getProjectsNoSchemes(string token) 
+  #Returns a list of projects available to the user
+
+  #array	getResolutions(string token) 
+  #Returns all resolutions in the system
+
+  #hash	getServerInfo(string token) 
+  #Returns the Server information such as baseUrl, version, edition, buildDate, buildNumber.
+
+  #array	getStatuses(string token) 
+  #Returns all statuses in the system
+
+  #array	getSubTaskIssueTypes(string token) 
+  #Returns all visible subtask issue types in the system
+
+  #boolean	logout(string token) 
+  #Logs the user out of JIRA
