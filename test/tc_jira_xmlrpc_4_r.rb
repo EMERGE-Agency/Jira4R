@@ -32,6 +32,7 @@ class TC_JiraXMLRPC4R < Test::Unit::TestCase
   end
   
   def teardown
+    @jira.logout
     @jira = nil
   end
 end
