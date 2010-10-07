@@ -4,7 +4,7 @@ require 'utils'
 module JiraXMLRPC4R
   class JiraTool
     
-    def initialize(host=nil,path=nil,port=nil,username=nil,password=nil, default_remote_object = "jira1")
+    def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1")
       @service = XMLRPC::Client.new(host, path, port)
       @default_remote_object = default_remote_object
     end
