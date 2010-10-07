@@ -8,11 +8,12 @@ module JiraXMLRPC4R
 	  end
     
     def self.camelized_caller_method(depth=1)
-		  camelize(parse_caller(caller(depth+1).first).last)
+		  result = parse_caller(caller(depth+1).first).last
+		  camelize(result, false)
     end
     
-    #From http://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/methods.rb
-    def self.camelize(lower_case_and_underscored_word, first_letter_in_uppercase = false)
+    #copied from http://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/methods.rb
+    def self.camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
       if first_letter_in_uppercase
         lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
       else
@@ -40,17 +41,23 @@ module JiraXMLRPC4R
       @default_remote_object = default_remote_object
     end
     
+    #string	login(string username, string password) 
+    #Logs the user into JIRA.
     def login(username, password)
       @token = call_remote_method(username, password)
     end
     
-    def call_remote_method(*args)
-      args.insert(0, @token) if @token
-      @service.call("#{@default_remote_object}.#{Utils.camelized_caller_method}", *args)
+    #hash	getIssue(string token, string issueKey) 
+    #Gets an issue from a given issue key.
+    def get_issue(issue_key)
+      call_remote_method(issue_key)
     end
     
     #boolean	addComment(string token, string issueKey, string comment) 
     #Adds a comment to an issue
+    def add_comment()
+      
+    end
     
     #hash	createIssue(string token, hash rIssueStruct) 
     #Creates an issue in JIRA from a Hashtable object.
@@ -60,9 +67,6 @@ module JiraXMLRPC4R
     
     #array	getComponents(string token, string projectKey) 
     #Returns all components available in the specified project
-    
-    #hash	getIssue(string token, string issueKey) 
-    #Gets an issue from a given issue key.
     
     #array	getIssuesFromFilter(string token, string filterId) 
     #Executes a saved filter
@@ -83,9 +87,6 @@ module JiraXMLRPC4R
     
     #array	getVersions(string token, string projectKey) 
     #Returns all versions available in the specified project
-    
-    #string	login(string username, string password) 
-    #Logs the user into JIRA.
     
     #hash	updateIssue(string token, string issueKey, hash fieldValues) 
     #Updates an issue in JIRA from a Hashtable object.
@@ -117,5 +118,10 @@ module JiraXMLRPC4R
     
     #boolean	logout(string token) 
     #Logs the user out of JIRA
+    private
+      def call_remote_method(*args)
+        args.insert(0, @token) if @token
+        @service.call("#{@default_remote_object}.#{Utils.camelized_caller_method}", *args)
+      end
   end  
 end
