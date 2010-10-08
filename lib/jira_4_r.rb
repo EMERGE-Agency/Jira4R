@@ -7,9 +7,9 @@ module Jira4R
     def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1")
       @service = XMLRPC::Client.new(host, path, port)
       string = "http://" + host
-      string += ":" + port if port
+      string += ":#{port}" if port
       
-      @soap_service = SOAP::WSDLDriverFactory.new( '#{string}:/rpc/soap/jirasoapservice-v2?wsdl' ).create_rpc_driver
+      @soap_service = SOAP::WSDLDriverFactory.new( "#{string}:/rpc/soap/jirasoapservice-v2?wsdl" ).create_rpc_driver
       @default_remote_object = default_remote_object
     end
     

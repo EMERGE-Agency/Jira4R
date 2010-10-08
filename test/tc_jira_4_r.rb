@@ -1,10 +1,10 @@
 require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
+$LOAD_PATH << './lib'
+require 'lib/jira_4_r'
 
-require 'jira_4_r.rb'
-
-class TC_JiraXMLRPC4R < Test::Unit::TestCase
+class TC_Jira4R < Test::Unit::TestCase
   def setup
     @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
     @jira.login("username", "password")
