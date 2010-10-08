@@ -2,21 +2,21 @@ require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
 
-require 'jira_xmlrpc_4_r.rb'
+require 'jira_4_r.rb'
 
 class TC_JiraXMLRPC4R < Test::Unit::TestCase
   def setup
-    @jira = JiraXMLRPC4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
+    @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
     @jira.login("username", "password")
   end
   
   def test_camelize
-    result = JiraXMLRPC4R::Utils.camelize("my_test_method", false)
+    result = Jira4R::Utils.camelize("my_test_method", false)
     assert_equal(result, "myTestMethod")
   end
   
   def test_login
-    @jira = JiraXMLRPC4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
+    @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
     assert_nothing_raised do  
       @jira.login("username", "password")
     end  
