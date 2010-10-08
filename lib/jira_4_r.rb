@@ -1,7 +1,8 @@
 require 'xmlrpc/client'
+require 'xmlrpc/parser'
 require 'utils'
 
-module JiraXMLRPC4R
+module Jira4R
   class JiraTool
     
     def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1")
@@ -30,8 +31,10 @@ module JiraXMLRPC4R
     
     #hash	updateIssue(string token, string issueKey, hash fieldValues) 
     #Updates an issue in JIRA from a Hashtable object.
-    def update_issue(issue_key, issue_hash)
-      call_remote_method(issue_key, issue_hash) 
+    def update_issue(issue_key, issue_hash = {})
+      struct = XMLRPC::Convert.struct(issue_hash)
+      pp struct
+      call_remote_method(issue_key, struct) 
     end
  
     #array	getIssuesFromTextSearchWithProject(string token, array projectKeys, string searchTerms, int maxNumResults) 

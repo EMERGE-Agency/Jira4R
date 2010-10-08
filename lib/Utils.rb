@@ -1,4 +1,4 @@
-module JiraXMLRPC4R
+module Jira4R
   class Utils
 	  def self.caller_method(depth=1)
 		parse_caller(caller(depth+1).first).last
