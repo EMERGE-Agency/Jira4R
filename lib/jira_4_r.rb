@@ -4,12 +4,10 @@ require 'utils'
 
 module Jira4R
   class JiraTool
-    def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1")
+    def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1", wsdl_url=nil)
       @service = XMLRPC::Client.new(host, path, port)
-      string = "http://" + host
-      string += ":#{port}" if port
-      
-      @soap_service = SOAP::WSDLDriverFactory.new( "#{string}:/rpc/soap/jirasoapservice-v2?wsdl" ).create_rpc_driver
+      wsdl_url ||= "http://development.empirestaging.com:9000/rpc/soap/jirasoapservice-v2?wsdl"
+      @soap_service = SOAP::WSDLDriverFactory.new(wsdl_url).create_rpc_driver
       @default_remote_object = default_remote_object
     end
     
