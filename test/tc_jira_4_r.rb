@@ -1,3 +1,4 @@
+require 'pp'
 require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
@@ -20,6 +21,31 @@ class TC_Jira4R < Test::Unit::TestCase
     assert_nothing_raised do  
       @jira.login("username", "password")
     end  
+  end
+  
+  def test_get_fields_for_action
+    result = @jira.get_fields_for_action("2")
+    assert(result.keys.member? "Resolution")
+  end
+  
+  def test_progress_workflow_action
+    # 6 is the id for closed status. 2 is the action item.
+    result = @jira.progress_workflow_action("SP-4", "2", {})
+    assert_equal("6", result['status'])
+    
+    #reopen issue
+    result = @jira.progress_workflow_action("SP-4", "3", {})
+    assert_equal("4", result['status'])
+  end
+  
+  def test_get_available_actions
+    result = @jira.get_available_actions("SP-4")
+    pp result
+  end
+  
+  def test_get_comments
+    result = @jira.get_comments("SP-4")
+    assert_equal(result.class, Array)
   end
   
   def test_get_issue
