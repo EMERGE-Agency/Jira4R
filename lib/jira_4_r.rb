@@ -10,50 +10,64 @@ module Jira4R
       @soap_service = SOAP::WSDLDriverFactory.new(wsdl_url).create_rpc_driver
       @default_remote_object = default_remote_object
     end
-    
+
+    def get_fields_for_action(issue_key, action_id)
+      @soap_service.getFieldsForAction(@token, issue_key, action_id)
+    end
+  
     #string	login(string username, string password) 
     #Logs the user into JIRA.
     def login(username, password)
-      @token = call_remote_method(username, password)
+      @token = call_xmlrpc_remote(username, password)
     end
     
     #boolean	addComment(string token, string issueKey, string comment) 
     #Adds a comment to an issue
     def add_comment(issue_key, comment)
-      call_remote_method(issue_key, comment)      
+      call_xmlrpc_remote(issue_key, comment)      
     end
   
     #hash	createIssue(string token, hash rIssueStruct) 
     #Creates an issue in JIRA from a Hashtable object.
     def create_issue(issue_hash)
-      call_remote_method(issue_hash)
+      call_xmlrpc_remote(issue_hash)
     end
     
+    def get_available_actions(issue_key)
+      result = @soap_service.getAvailableActions(@token, issue_key)
+      if result
+        result.map{|action| {'name' => action.name, 'id' => action.id}}
+      end
+    end
+    
+    def progress_workflow_action(issue_key, action_id, action_params)
+      @soap_service.progressWorkflowAction(@token, issue_key, action_id, action_params)
+    end
     
     #hash	updateIssue(string token, string issueKey, hash fieldValues) 
     #Updates an issue in JIRA from a Hashtable object.
     def update_issue(issue_key, issue_hash = {})
       struct = XMLRPC::Convert.struct(issue_hash)
       pp struct
-      call_remote_method(issue_key, struct) 
+      call_xmlrpc_remote(issue_key, struct) 
     end
  
     #array	getIssuesFromTextSearchWithProject(string token, array projectKeys, string searchTerms, int maxNumResults) 
     #Find issues using a free text search, limited to certain projects
     def get_issues_from_text_search_with_project(issue_key, project_keys, search_terms, max_num_results)
-      call_remote_method(issue_key, project_keys, search_terms, max_num_results)
+      call_xmlrpc_remote(issue_key, project_keys, search_terms, max_num_results)
     end
 
     %w[get_comments get_components get_issues_from_filter get_user get_issue_types_for_project get_sub_task_issue_types_for_project get_issues_from_text_search get_versions get_issue].each do |method|
-      self.class_eval %{def #{method}(argument);call_remote_method argument; end}
+      self.class_eval %{def #{method}(argument);call_xmlrpc_remote argument; end}
     end
   
     %w[get_favourite_filters get_issue_types get_priorities get_projects_no_schemes get_resolutions get_server_info get_statuses get_subtask_issue_types logout].each do |method|
-      self.class_eval %{def #{method}; call_remote_method; end}
+      self.class_eval %{def #{method}; call_xmlrpc_remote; end}
     end
     
     private
-      def call_remote_method(*args)
+      def call_xmlrpc_remote(*args)
         args.insert(0, @token) if @token
         @service.call("#{@default_remote_object}.#{Utils.camelized_caller_method}", *args)
       end
