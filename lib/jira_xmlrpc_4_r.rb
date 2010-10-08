@@ -31,7 +31,7 @@ module JiraXMLRPC4R
     #hash	updateIssue(string token, string issueKey, hash fieldValues) 
     #Updates an issue in JIRA from a Hashtable object.
     def update_issue(issue_key, issue_hash)
-      call_remote_method(issue_key, comment) 
+      call_remote_method(issue_key, issue_hash) 
     end
  
     #array	getIssuesFromTextSearchWithProject(string token, array projectKeys, string searchTerms, int maxNumResults) 
