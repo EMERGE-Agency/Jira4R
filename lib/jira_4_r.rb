@@ -12,7 +12,8 @@ module Jira4R
     end
 
     def get_fields_for_action(issue_key, action_id)
-      @soap_service.getFieldsForAction(@token, issue_key, action_id)
+      result = @soap_service.getFieldsForAction(@token, issue_key, action_id)
+      result.map{|field| {'name' => field.name, 'id' => field.id}}
     end
   
     #string	login(string username, string password) 
