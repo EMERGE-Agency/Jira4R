@@ -1,19 +1,32 @@
+require 'rubygems'
 require 'soap/wsdlDriver'
 require 'xmlrpc/client'
 require 'utils'
+require 'facets'
 
 module Jira4R
   class JiraTool
     def initialize(host=nil,path=nil,port=nil, default_remote_object = "jira1", wsdl_url=nil)
       @service = XMLRPC::Client.new(host, path, port)
       wsdl_url ||= "http://development.empirestaging.com:9000/rpc/soap/jirasoapservice-v2?wsdl"
-      @soap_service = SOAP::WSDLDriverFactory.new(wsdl_url).create_rpc_driver
+      silently(){@soap_service = SOAP::WSDLDriverFactory.new(wsdl_url).create_rpc_driver}
       @default_remote_object = default_remote_object
     end
 
     def get_fields_for_action(issue_key, action_id)
-      result = @soap_service.getFieldsForAction(@token, issue_key, action_id)
-      result.map{|field| {'name' => field.name, 'id' => field.id}}
+      soap_service(issue_key, action_id).collect{|row| [row.name, row.id]}.to_h_flat
+    end
+  
+    def get_available_actions(issue_key)
+      result = {}
+      soap_service(issue_key).each do |row|
+        result.store(row.name,row.id)
+      end
+      result
+    end
+
+    def progress_workflow_action(issue_key, action_id, action_params)
+      soap_service(issue_key, action_id, action_params)
     end
   
     #string	login(string username, string password) 
@@ -34,19 +47,9 @@ module Jira4R
       call_xmlrpc_remote(issue_hash)
     end
     
-    def get_available_actions(issue_key)
-      result = @soap_service.getAvailableActions(@token, issue_key)
-      if result
-        result.map{|action| {'name' => action.name, 'id' => action.id}}
-      end
-    end
-    
-    def progress_workflow_action(issue_key, action_id, action_params)
-      @soap_service.progressWorkflowAction(@token, issue_key, action_id, action_params)
-    end
-    
     #hash	updateIssue(string token, string issueKey, hash fieldValues) 
     #Updates an issue in JIRA from a Hashtable object.
+    #This is really a useless method. 
     def update_issue(issue_key, issue_hash = {})
       struct = XMLRPC::Convert.struct(issue_hash)
       pp struct
@@ -68,6 +71,11 @@ module Jira4R
     end
     
     private
+      def soap_service(*args)
+        args.insert(0, @token) if @token
+        @soap_service.send(Utils.camelized_caller_method, *args)
+      end
+    
       def call_xmlrpc_remote(*args)
         args.insert(0, @token) if @token
         @service.call("#{@default_remote_object}.#{Utils.camelized_caller_method}", *args)
