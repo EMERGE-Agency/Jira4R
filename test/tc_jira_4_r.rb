@@ -5,15 +5,10 @@ require 'test/unit'
 $LOAD_PATH << './lib'
 require 'lib/jira_4_r'
 
-class TC_Jira4R < Test::Unit::TestCase
+class TC_Jira4R_JiraTool < Test::Unit::TestCase
   def setup
     @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
     @jira.login("username", "password")
-  end
-  
-  def test_camelize
-    result = Jira4R::Utils.camelize("my_test_method", false)
-    assert_equal(result, "myTestMethod")
   end
   
   def test_login
@@ -24,8 +19,8 @@ class TC_Jira4R < Test::Unit::TestCase
   end
   
   def test_get_fields_for_action
-    result = @jira.get_fields_for_action("2")
-    assert(result.keys.member? "Resolution")
+    result = @jira.get_fields_for_action("SP-4","2")
+    assert(result.keys.member?("Resolution") && result.values.member?("resolution"))
   end
   
   def test_progress_workflow_action
@@ -40,7 +35,7 @@ class TC_Jira4R < Test::Unit::TestCase
   
   def test_get_available_actions
     result = @jira.get_available_actions("SP-4")
-    pp result
+    assert(result.keys.member?("Close Issue") && result.values.member?("2"))
   end
   
   def test_get_comments
