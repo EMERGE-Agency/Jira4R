@@ -3,7 +3,7 @@ require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
 $LOAD_PATH << './lib'
-require 'lib/jira_4_r'
+require 'lib/utils'
 
 class TC_Jira4R_JiraTool < Test::Unit::TestCase
   def setup
