@@ -1,2 +1,3 @@
 test/server_info.yaml
 .bundle
+Gemfile.lock
