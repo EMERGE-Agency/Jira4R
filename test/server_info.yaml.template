@@ -1,0 +1,6 @@
+host:                   <Your server>
+path:                   "/rpc/xmlrpc" 	#Standard in Jira
+port:                   				#If other then 80
+default_remote_object:  "jira1"			#Standard in Jira
+username:               
+password:               
