@@ -1,4 +1,5 @@
 require 'pp'
+require 'yaml'
 require 'rubygems'
 gem 'test-unit'
 require 'test/unit'
@@ -7,15 +8,10 @@ require 'lib/jira_tool'
 
 class TC_Jira4R_JiraTool < Test::Unit::TestCase
   def setup
-    @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
-    @jira.login("username", "password")
-  end
-  
-  def test_login
-    @jira = Jira4R::JiraTool.new("server", "/rpc/xmlrpc", port, "jira1")
-    assert_nothing_raised do  
-      @jira.login("username", "password")
-    end  
+    
+    server_info = YAML.load_file("test/server_info.yaml")
+    @jira = Jira4R::JiraTool.new(server_info['host'], server_info['path'], server_info['port'], server_info['default_remote_object'])
+    @jira.login(server_info['username'], server_info['password'])
   end
   
   def test_get_fields_for_action
